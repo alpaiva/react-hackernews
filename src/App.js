@@ -1,4 +1,4 @@
-import { Container, Navbar, Table } from 'react-bootstrap'
+import { Container,  Table } from 'react-bootstrap'
 
 const list = [
   {
@@ -20,44 +20,34 @@ const list = [
 ]
 function App() {
 
-  const welcome = 'Welcome'
-  const user = { name: 'user', lastname: 'lastname' }
   return (
-    <div>
-      <Navbar bg='light' expand='lg' className='mb-5'>
-        <Container>
-          <Navbar.Brand href="#">React-HackerNews</Navbar.Brand>
-        </Container>
-      </Navbar>
-      <Container fluid='md'>
-        <Table reponsive='sm' striped bordered hover size='sm'>
-          <thead>
+    <Container fluid='md'>
+      <Table reponsive='sm' striped bordered hover size='sm'>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Comments</th>
+            <th>Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          {list.map(item =>
             <tr>
-              <th>Title</th>
-              <th>Author</th>
-              <th>Comments</th>
-              <th>Points</th>
+              <td>
+                <a href={item.url}>{item.title}</a>
+              </td>
+              <td>{item.author}</td>
+              <td>{item.num_comments}</td>
+              <td>{item.points}</td>
             </tr>
-          </thead>
-          <tbody>
-            {list.map(item => {
-              return (
-                <tr>
-                  <td>
-                    <a href={item.url}>{item.title}</a>
-                  </td>
-                  <td>{item.author}</td>
-                  <td>{item.num_comments}</td>
-                  <td>{item.points}</td>
-                </tr>
-              )
-            })
-            }
-          </tbody>
-        </Table>
-      </Container>
+          )
+          }
+        </tbody>
+      </Table>
+    </Container>
 
-    </div>
+
   )
 }
 
