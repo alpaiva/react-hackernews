@@ -1,4 +1,4 @@
-import { Container, Table } from 'react-bootstrap'
+import { Container, Navbar, Table } from 'react-bootstrap'
 
 const list = [
   {
@@ -19,14 +19,18 @@ const list = [
   },
 ]
 function App() {
+
   const welcome = 'Welcome'
   const user = { name: 'user', lastname: 'lastname' }
   return (
     <div>
-      <h1>{welcome}</h1>
-      <h2>{user.lastname}</h2>
+      <Navbar bg='light' expand='lg' className='mb-5'>
+        <Container>
+          <Navbar.Brand href="#">React-HackerNews</Navbar.Brand>
+        </Container>
+      </Navbar>
       <Container fluid='md'>
-        <Table reponsive='sm' striped bordered hover size='sm' mt='20'>
+        <Table reponsive='sm' striped bordered hover size='sm'>
           <thead>
             <tr>
               <th>Title</th>
