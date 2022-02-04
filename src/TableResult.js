@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { Table } from 'react-bootstrap'
+import { Table, Button } from 'react-bootstrap'
 const list = [
     {
         title: 'React',
@@ -23,7 +23,10 @@ class TableResult extends Component {
     constructor(props) {
         super(props)
 
-        this.setState({ list })
+        this.state = { list }
+
+        this.onDismiss = this.onDismiss.bind(this)
+        
     }
 
     render() {
@@ -37,19 +40,31 @@ class TableResult extends Component {
                 </tr>
             </thead>
             <tbody>
-                {list.map(item =>
-                    <tr>
+                {this.state.list.map(item =>
+                    <tr key={item.objectID}>
+                        
                         <td>
                             <a href={item.url}>{item.title}</a>
                         </td>
                         <td>{item.author}</td>
                         <td>{item.num_comments}</td>
                         <td>{item.points}</td>
+                        <td>
+                            <Button variant='secondary' size='sm'
+                            onClick={() => this.onDismiss(item.objectID)} >
+                                Dismiss
+                            </Button>
+                        </td>
                     </tr>
                 )
                 }
             </tbody>
         </Table>)
+    }
+
+    onDismiss(id) {
+        const filteredList = this.state.list.filter(item => item.objectID !== id)
+        this.setState({ list: filteredList })
     }
 }
 
