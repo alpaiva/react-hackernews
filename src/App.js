@@ -1,3 +1,5 @@
+import { Container, Table } from 'react-bootstrap'
+
 const list = [
   {
     title: 'React',
@@ -23,19 +25,34 @@ function App() {
     <div>
       <h1>{welcome}</h1>
       <h2>{user.lastname}</h2>
-      {list.map(item => {
-        return (
-          <div>
-            <span>
-              <a href={item.url}>{item.title}</a>
-            </span>
-            <span>{item.author}</span>
-            <span>{item.num_comments}</span>
-            <span>{item.points}</span>
-          </div>
-        )
-      })
-      }
+      <Container fluid='md'>
+        <Table reponsive='sm' striped bordered hover size='sm' mt='20'>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Comments</th>
+              <th>Points</th>
+            </tr>
+          </thead>
+          <tbody>
+            {list.map(item => {
+              return (
+                <tr>
+                  <td>
+                    <a href={item.url}>{item.title}</a>
+                  </td>
+                  <td>{item.author}</td>
+                  <td>{item.num_comments}</td>
+                  <td>{item.points}</td>
+                </tr>
+              )
+            })
+            }
+          </tbody>
+        </Table>
+      </Container>
+
     </div>
   )
 }
