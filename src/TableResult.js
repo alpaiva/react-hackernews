@@ -39,11 +39,13 @@ class TableResult extends Component {
     }
 
     render() {
+        const { searchTerm, list } = this.state
         return (
             <div>
                 <Form>
                     <Form.Control className="mb-2" placeholder="Input filter" 
-                    onChange={this.onSearchChange} />
+                    onChange={this.onSearchChange}
+                    value={searchTerm} />
                 </Form>
                 <Table reponsive='sm' striped bordered hover size='sm'>
                     <thead>
@@ -55,11 +57,10 @@ class TableResult extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.list
+                        {list
                         .filter(isSearched(this.state.searchTerm))
                         .map(item =>
                             <tr key={item.objectID}>
-
                                 <td>
                                     <a href={item.url}>{item.title}</a>
                                 </td>
