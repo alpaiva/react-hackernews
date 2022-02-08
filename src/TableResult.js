@@ -1,64 +1,26 @@
-import { Component } from "react";
-import { Table, Button, Form } from 'react-bootstrap'
-const list = [
-    {
-        title: 'React',
-        url: 'https://facebook.github.io/react/',
-        author: 'Jordan Walke',
-        num_comments: 3,
-        points: 4,
-        objectID: 0,
-    },
-    {
-        title: 'Redux',
-        url: 'https://github.com/reactjs/redux',
-        author: 'Dan Abramov, Andrew Clark',
-        num_comments: 2,
-        points: 5,
-        objectID: 1,
-    },
-]
+import { Component } from 'react'
+import { Table, Button } from 'react-bootstrap'
 
-const isSearched = searchTerm => 
+const isSearched = searchTerm =>
     item => item.title.toLowerCase().includes(searchTerm.toLowerCase())
-
-
 class TableResult extends Component {
-
-    constructor(props) {
-        super(props)
-
-        this.state = {
-            list,
-            searchTerm: ''
-        }
-
-        this.onDismiss = this.onDismiss.bind(this)
-        this.onSearchChange = this.onSearchChange.bind(this)
-    
-    }
-
     render() {
-        const { searchTerm, list } = this.state
+        const { pattern, list, onDismiss } = this.props
+
         return (
-            <div>
-                <Form>
-                    <Form.Control className="mb-2" placeholder="Input filter" 
-                    onChange={this.onSearchChange}
-                    value={searchTerm} />
-                </Form>
-                <Table reponsive='sm' striped bordered hover size='sm'>
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Author</th>
-                            <th>Comments</th>
-                            <th>Points</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {list
-                        .filter(isSearched(this.state.searchTerm))
+
+            <Table reponsive='sm' striped bordered hover size='sm'>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Comments</th>
+                        <th>Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {list
+                        .filter(isSearched(pattern))
                         .map(item =>
                             <tr key={item.objectID}>
                                 <td>
@@ -69,30 +31,18 @@ class TableResult extends Component {
                                 <td>{item.points}</td>
                                 <td>
                                     <Button variant='secondary' size='sm'
-                                        onClick={() => this.onDismiss(item.objectID)} >
+                                        onClick={() => onDismiss(item.objectID)} >
                                         Dismiss
                                     </Button>
                                 </td>
                             </tr>
                         )
-                        }
-                    </tbody>
-                </Table>
-            </div>
+                    }
+                </tbody>
+            </Table>
+
         )
     }
-
-    onDismiss(id) {
-        const filteredList = this.state.list.filter(item => item.objectID !== id)
-        this.setState({ list: filteredList })
-    }
-
-    onSearchChange(event) {
-     
-        this.setState({searchTerm : event.target.value})
-    }
-
-    
 }
 
 export default TableResult

@@ -1,12 +1,12 @@
 import { Container } from 'react-bootstrap'
-import TableResult from './TableResult'
+import AppContainer from './AppContainer'
 
 function App() {
 
   return (
         
     <Container fluid='md'>
-      <TableResult/>
+      <AppContainer/>
     </Container>
 
 
