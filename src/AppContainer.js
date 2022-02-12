@@ -28,7 +28,7 @@ class AppContainer extends Component {
 
         fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}`)
             .then(response => response.json())
-            .then(result => this.setSearchTopStories(result.hits))
+            .then(result => this.setSearchTopStories(result))
             .catch(error => error);
     }
 
@@ -37,9 +37,9 @@ class AppContainer extends Component {
     }
 
     render() {
-       
+
         const { searchTerm, result } = this.state
-        
+
         if (!result) {
             return null
         }
@@ -47,7 +47,7 @@ class AppContainer extends Component {
             <div>
                 <Search value={searchTerm} onChange={this.onSearchChange} />
                 <TableResult
-                    list={result}
+                    list={result.hits}
                     pattern={searchTerm}
                     onDismiss={this.onDismiss} />
             </div>
@@ -55,8 +55,8 @@ class AppContainer extends Component {
     }
 
     onDismiss(id) {
-        const filteredList = this.state.result.filter(item => item.objectID !== id)
-        this.setState({ result: filteredList })
+        const filteredList = this.state.result.hits.filter(item => item.objectID !== id)
+        this.setState({ result: Object.assign({}, this.state.result, { hits: filteredList }) })
     }
 
     onSearchChange(event) {
