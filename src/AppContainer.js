@@ -56,7 +56,10 @@ class AppContainer extends Component {
 
     onDismiss(id) {
         const filteredList = this.state.result.hits.filter(item => item.objectID !== id)
-        this.setState({ result: Object.assign({}, this.state.result, { hits: filteredList }) })
+
+        const result = { ...this.state.result, hits : filteredList }
+
+        this.setState({ result })
     }
 
     onSearchChange(event) {
