@@ -1,12 +1,14 @@
 import { Component } from "react";
 import TableResult from "./TableResult";
 import Search from './Search'
+import { Pagination } from "react-bootstrap";
 
 
 const DEFAULT_QUERY = 'redux'
 const PATH_BASE = 'https://hn.algolia.com/api/v1';
 const PATH_SEARCH = '/search';
 const PARAM_SEARCH = 'query=';
+const PARAM_PAGE = 'page='
 
 class AppContainer extends Component {
 
@@ -30,8 +32,10 @@ class AppContainer extends Component {
         this.fetchSearchTopStories(searchTerm);
     }
 
-    fetchSearchTopStories(searchTerm) {
-        fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}`)
+    fetchSearchTopStories(searchTerm, page = 0) {
+
+        const url = `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}`;
+        fetch(url)
             .then(response => response.json())
             .then(result => this.setSearchTopStories(result))
             .catch(error => error);
@@ -48,6 +52,7 @@ class AppContainer extends Component {
         if (!result) {
             return null
         }
+        const page = result.page || 0
         return (
             <div>
                 <Search value={searchTerm}
@@ -56,6 +61,10 @@ class AppContainer extends Component {
                 <TableResult
                     list={result.hits}
                     onDismiss={this.onDismiss} />
+
+                <Pagination>
+                    <Pagination.Next onClick={() => this.fetchSearchTopStories(searchTerm, page + 1)} />
+                </Pagination>
             </div>
         )
     }
