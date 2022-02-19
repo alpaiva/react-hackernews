@@ -1,10 +1,9 @@
 import { Table, Button } from 'react-bootstrap'
 
-const isSearched = searchTerm =>
-    item => item.title.toLowerCase().includes(searchTerm.toLowerCase())
+
 const TableResult = props => {
 
-    const { pattern, list, onDismiss } = props
+    const { list, onDismiss } = props
 
     return (
 
@@ -19,7 +18,6 @@ const TableResult = props => {
             </thead>
             <tbody>
                 {list
-                    .filter(isSearched(pattern))
                     .map(item =>
                         <tr key={item.objectID}>
                             <td>

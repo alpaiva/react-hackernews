@@ -21,11 +21,16 @@ class AppContainer extends Component {
         this.onDismiss = this.onDismiss.bind(this)
         this.onSearchChange = this.onSearchChange.bind(this)
         this.setSearchTopStories = this.setSearchTopStories.bind(this)
+        this.onSearchSubmit = this.onSearchSubmit.bind(this)
     }
 
     componentDidMount() {
         const { searchTerm } = this.state;
 
+        this.fetchSearchTopStories(searchTerm);
+    }
+
+    fetchSearchTopStories(searchTerm) {
         fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}`)
             .then(response => response.json())
             .then(result => this.setSearchTopStories(result))
@@ -45,10 +50,11 @@ class AppContainer extends Component {
         }
         return (
             <div>
-                <Search value={searchTerm} onChange={this.onSearchChange} />
+                <Search value={searchTerm}
+                    onChange={this.onSearchChange}
+                    onSubmit={this.onSearchSubmit} />
                 <TableResult
                     list={result.hits}
-                    pattern={searchTerm}
                     onDismiss={this.onDismiss} />
             </div>
         )
@@ -57,13 +63,19 @@ class AppContainer extends Component {
     onDismiss(id) {
         const filteredList = this.state.result.hits.filter(item => item.objectID !== id)
 
-        const result = { ...this.state.result, hits : filteredList }
+        const result = { ...this.state.result, hits: filteredList }
 
         this.setState({ result })
     }
 
     onSearchChange(event) {
         this.setState({ searchTerm: event.target.value })
+    }
+
+    onSearchSubmit(event) {
+        event.preventDefault()
+        const { searchTerm } = this.state
+        this.fetchSearchTopStories(searchTerm);
     }
 
 

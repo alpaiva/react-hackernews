@@ -1,15 +1,18 @@
-import { Form } from 'react-bootstrap'
+import { Form, Button } from 'react-bootstrap'
 
 const Search = props => {
 
-    const { value, onChange } = props
+    const { value, onChange, onSubmit } = props
     return (
-    
-            <Form>
-                <Form.Control className="mb-2" placeholder="Input filter"
-                    onChange={onChange}
-                    value={value} />
-            </Form>
+
+        <Form onSubmit={onSubmit}>
+            <Form.Control className="mb-2" placeholder="Input filter"
+                onChange={onChange}
+                value={value} />
+            <Button className='mb-2' variant="primary" type="submit">
+                Submit
+            </Button>
+        </Form>
 
     )
 }
