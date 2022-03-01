@@ -18,7 +18,8 @@ class AppContainer extends Component {
         this.state = {
             results: null,
             searchKey: '',
-            searchTerm: DEFAULT_QUERY
+            searchTerm: DEFAULT_QUERY,
+            error: null
         }
 
         this.onDismiss = this.onDismiss.bind(this)
@@ -39,7 +40,7 @@ class AppContainer extends Component {
         fetch(url)
             .then(response => response.json())
             .then(result => this.setSearchTopStories(result))
-            .catch(error => error);
+            .catch(error => this.setState({ error }));
     }
 
     setSearchTopStories(result) {
@@ -55,10 +56,14 @@ class AppContainer extends Component {
 
     render() {
 
-        const { searchTerm, searchKey, results } = this.state
+        const { searchTerm, searchKey, results, error } = this.state
 
         const page = results && results[searchKey] && results[searchKey].page || 0
         const list = results && results[searchKey] && results[searchKey].hits || 0
+
+        if (error) {
+            return (<div><p>Something went wrong.</p></div>)
+        }
 
         if (!list) {
             return null
