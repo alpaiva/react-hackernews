@@ -34,7 +34,7 @@ class AppContainer extends Component {
     }
 
     fetchSearchTopStories(searchTerm, page = 0) {
-
+        
         const url = `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}`;
         fetch(url)
             .then(response => response.json())
@@ -74,7 +74,7 @@ class AppContainer extends Component {
                     onDismiss={this.onDismiss} />
 
                 <Pagination>
-                    <Pagination.Next onClick={() => this.fetchSearchTopStories(searchTerm, page + 1)} />
+                    <Pagination.Next onClick={() => this.fetchSearchTopStories(searchKey, page + 1)} />
                 </Pagination>
             </div>
         )
@@ -102,9 +102,15 @@ class AppContainer extends Component {
         event.preventDefault()
         const { searchTerm } = this.state
         this.setState({ searchKey: searchTerm })
-        this.fetchSearchTopStories(searchTerm);
+        if (this.needsToSearchTopStories(searchTerm)) {
+            this.fetchSearchTopStories(searchTerm);
+        } 
     }
 
+    needsToSearchTopStories(searchTerm) {
+        const { results } = this.state
+        return !results[searchTerm]
+    }
 
 }
 
