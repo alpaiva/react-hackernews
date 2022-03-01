@@ -16,7 +16,8 @@ class AppContainer extends Component {
         super(props)
 
         this.state = {
-            result: null,
+            results: null,
+            searchKey: '',
             searchTerm: DEFAULT_QUERY
         }
 
@@ -28,7 +29,7 @@ class AppContainer extends Component {
 
     componentDidMount() {
         const { searchTerm } = this.state;
-
+        this.setState({ searchKey: searchTerm })
         this.fetchSearchTopStories(searchTerm);
     }
 
@@ -42,24 +43,34 @@ class AppContainer extends Component {
     }
 
     setSearchTopStories(result) {
-        this.setState({ result })
+        const { hits, page } = result
+        const { searchKey, results } = this.state
+        const oldHits = results && results[searchKey] ? results[searchKey].hits : []
+
+        const updatedHits = [...oldHits, ...hits]
+
+        this.setState({ results: { ...results, [searchKey]: { hits: updatedHits, page } } })
+
     }
 
     render() {
 
-        const { searchTerm, result } = this.state
+        const { searchTerm, searchKey, results } = this.state
 
-        if (!result) {
+        const page = results && results[searchKey] && results[searchKey].page || 0
+        const list = results && results[searchKey] && results[searchKey].hits || 0
+
+        if (!list) {
             return null
         }
-        const page = result.page || 0
+
         return (
             <div>
                 <Search value={searchTerm}
                     onChange={this.onSearchChange}
                     onSubmit={this.onSearchSubmit} />
                 <TableResult
-                    list={result.hits}
+                    list={list}
                     onDismiss={this.onDismiss} />
 
                 <Pagination>
@@ -70,11 +81,17 @@ class AppContainer extends Component {
     }
 
     onDismiss(id) {
-        const filteredList = this.state.result.hits.filter(item => item.objectID !== id)
 
-        const result = { ...this.state.result, hits: filteredList }
+        const { searchKey, results } = this.state
+        const { hits, page } = results[searchKey]        
+        const filteredList = hits.filter(item => item.objectID !== id)
 
-        this.setState({ result })
+        const updatedResults = {
+            ...results,
+            [searchKey]: { hits: filteredList, page }
+        }
+
+        this.setState({ results : updatedResults })
     }
 
     onSearchChange(event) {
@@ -84,6 +101,7 @@ class AppContainer extends Component {
     onSearchSubmit(event) {
         event.preventDefault()
         const { searchTerm } = this.state
+        this.setState({ searchKey: searchTerm })
         this.fetchSearchTopStories(searchTerm);
     }
 
